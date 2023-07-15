@@ -1,0 +1,450 @@
+﻿FUNCTION_BLOCK "weQube Kamera Kontrol"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR_INPUT 
+      execute { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      TEL_errorState { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : HW_ANY;
+      current_prg { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : DInt;
+      seq_count { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : DInt;
+      mode01 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      mode02 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      mode03 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      mode04 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      mode05 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      tool_1 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      tool_2 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      tool_3 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      tool_4 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      tool_5 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      tool_6 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      tool_7 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      tool_8 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      tool_9 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      tool_10 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+   END_VAR
+
+   VAR_OUTPUT 
+      faultState { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      faultProgramChange { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      runSequenceError { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      done { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      error { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      prgChangeDone { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      prgSelection { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Byte;
+      triggerCmd { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      result1 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      result2 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      result3 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      result4 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      result5 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      result6 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      result7 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      result8 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      result9 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      result10 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+   END_VAR
+
+   VAR 
+      statErrorState { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Struct
+         Information { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         Warning { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         "Critical Error" { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         "Fatal Error" { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         Reserve_1 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         Reserve_2 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         "TCP/IP" { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         UDP { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         "Industrial Ethernet" { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         Reserve_3 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         Reserve_4 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         Reserve_5 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         UART { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         FTP { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         Flash { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         RAM { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         "SD-Card" { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         "File access" { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         Compatibility { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         Reserve_6 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         Reserve_7 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         Reserve_8 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         Reserve_9 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         Reserve_10 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         Sequencing { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         Processing { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         Trigger { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         Reserve_11 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         Reserve_12 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         Reserve_13 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         Reserve_14 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+         Reserve_15 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      END_STRUCT;
+      statReturn { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Int;
+      statFaultState { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statMemoryFault { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statProcessFault { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statGeneralFault { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statMode01Old { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statMode02Old { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statMode03Old { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statMode04Old { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statMode05Old { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statMode01Selection { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statMode02Selection { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statMode03Selection { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statMode04Selection { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statMode05Selection { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      stepChange { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Int;
+      statRunChange { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statPrgChangeDone { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statPrgChangeError { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statDone { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statError { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statResult1 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statResult2 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statResult3 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statResult4 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statResult5 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statResult6 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statResult7 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statResult8 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statResult9 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statResult10 { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      changeDelayTimer {InstructionName := 'TON_TIME'; LibVersion := '1.0'; ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : TON_TIME;
+      changeErrTimer {InstructionName := 'TON_TIME'; LibVersion := '1.0'; ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : TON_TIME;
+      statTrigger { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'; S7_SetPoint := 'True'} : Bool;
+      step { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Int;
+      statRunSeqCount_OK { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statRunSeqCountError { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statOldRunSeqCount { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : DInt;
+      statPrgSelection { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Byte;
+      delayTimer {InstructionName := 'TON_TIME'; LibVersion := '1.0'; ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : TON_TIME;
+      runSeqFaultTimer {InstructionName := 'TON_TIME'; LibVersion := '1.0'; ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : TON_TIME;
+   END_VAR
+
+   VAR_TEMP 
+      tempMode01Edge : Bool;
+      tempMode02Edge : Bool;
+      tempMode03Edge : Bool;
+      tempMode04Edge : Bool;
+      tempMode05Edge : Bool;
+   END_VAR
+
+   VAR CONSTANT 
+      CHANGE_DELAY : Time := T#100ms;
+      CHANGE_FAULT : Time := T#10S;
+      DLY_TIME : Time := T#100ms;
+      ERR_TIME : Time := T#3S;
+   END_VAR
+
+
+BEGIN
+	REGION Camera error status
+	    #statReturn := DPRD_DAT(LADDR := #TEL_errorState, RECORD => #statErrorState);
+	    #statMemoryFault := #statErrorState.Flash OR #statErrorState.RAM OR #statErrorState."SD-Card" OR #statErrorState."File access" OR #statErrorState.Compatibility;
+	    #statProcessFault := #statErrorState.Sequencing OR #statErrorState.Processing OR #statErrorState.Trigger;
+	    #statGeneralFault := #statErrorState."Critical Error" OR #statErrorState."Fatal Error";
+	    #statFaultState := #statGeneralFault OR #statProcessFault OR #statMemoryFault;
+	END_REGION
+	REGION Mode 1 selection rising edge
+	    #tempMode01Edge := #mode01 AND NOT #statMode01Old;
+	    #statMode01Old := #mode01;
+	END_REGION
+	REGION Mode 2 selection rising edge
+	    #tempMode02Edge := #mode02 AND NOT #statMode02Old;
+	    #statMode02Old := #mode02;
+	END_REGION
+	REGION Mode 3 selection rising edge
+	    #tempMode03Edge := #mode03 AND NOT #statMode03Old;
+	    #statMode03Old := #mode03;
+	END_REGION
+	REGION Mode 4 selection rising edge
+	    #tempMode04Edge := #mode04 AND NOT #statMode04Old;
+	    #statMode04Old := #mode04;
+	END_REGION
+	REGION Mode 5 selection rising edge
+	    #tempMode05Edge := #mode05 AND NOT #statMode05Old;
+	    #statMode05Old := #mode05;
+	END_REGION
+	REGION Model change procedure trigger signal
+	    IF #tempMode01Edge THEN
+	        #statMode01Selection := 1;
+	        #statMode02Selection := 0;
+	        #statMode03Selection := 0;
+	        #statMode04Selection := 0;
+	        #statMode05Selection := 0;
+	        #stepChange := 0;
+	        #statRunChange := 1;
+	        #statPrgChangeDone := 0;
+	        #statPrgSelection := 0;
+	    ELSIF #tempMode02Edge THEN
+	        #statMode01Selection := 0;
+	        #statMode02Selection := 1;
+	        #statMode03Selection := 0;
+	        #statMode04Selection := 0;
+	        #statMode05Selection := 0;
+	        #stepChange := 0;
+	        #statRunChange := 1;
+	        #statPrgChangeDone := 0;
+	        #statPrgSelection := 0;
+	    ELSIF #tempMode03Edge THEN
+	        #statMode01Selection := 0;
+	        #statMode02Selection := 0;
+	        #statMode03Selection := 1;
+	        #statMode04Selection := 0;
+	        #statMode05Selection := 0;
+	        #stepChange := 0;
+	        #statRunChange := 1;
+	        #statPrgChangeDone := 0;
+	        #statPrgSelection := 0;
+	    ELSIF #tempMode04Edge THEN
+	        #statMode01Selection := 0;
+	        #statMode02Selection := 0;
+	        #statMode03Selection := 0;
+	        #statMode04Selection := 1;
+	        #statMode05Selection := 0;
+	        #stepChange := 0;
+	        #statRunChange := 1;
+	        #statPrgChangeDone := 0;
+	        #statPrgSelection := 0;
+	    ELSIF #tempMode05Edge THEN
+	        #statMode01Selection := 0;
+	        #statMode02Selection := 0;
+	        #statMode03Selection := 0;
+	        #statMode04Selection := 0;
+	        #statMode05Selection := 1;
+	        #stepChange := 0;
+	        #statRunChange := 1;
+	        #statPrgChangeDone := 0;
+	        #statPrgSelection := 0;
+	    ELSIF NOT #mode01 AND NOT #mode02 AND NOT #mode03 AND NOT #mode04 AND NOT #mode05 THEN
+	        #statMode01Selection := 0;
+	        #statMode02Selection := 0;
+	        #statMode03Selection := 0;
+	        #statMode04Selection := 0;
+	        #statMode05Selection := 0;
+	        #stepChange := 0;
+	        #statRunChange := 0;
+	        #statPrgChangeDone := 1;
+	        #statPrgSelection := 0;
+	    END_IF;
+	END_REGION
+	REGION Model change process
+	    IF #statRunChange AND NOT #statPrgChangeDone THEN
+	        CASE #stepChange OF
+	            0:
+	                IF #statMode01Selection THEN
+	                    #statPrgSelection := 1;
+	                    #stepChange := 10;
+	                ELSIF #statMode02Selection THEN
+	                    #statPrgSelection := 2;
+	                    #stepChange := 10;
+	                ELSIF #statMode03Selection THEN
+	                    #statPrgSelection := 3;
+	                    #stepChange := 10;
+	                ELSIF #statMode04Selection THEN
+	                    #statPrgSelection := 4;
+	                    #stepChange := 10;
+	                ELSIF #statMode05Selection THEN
+	                    #statPrgSelection := 5;
+	                    #stepChange := 10;
+	                END_IF;
+	            10:
+	                IF #statPrgSelection <> 0 THEN
+	                    #changeDelayTimer(IN := TRUE,
+	                                      PT := #CHANGE_DELAY);
+	                    IF #changeDelayTimer.Q THEN
+	                        #stepChange := 20;
+	                    END_IF;
+	                END_IF;
+	            20:
+	                RESET_TIMER(#changeDelayTimer);
+	                #stepChange := 30;
+	            30:
+	                IF #statPrgSelection = DINT_TO_BYTE(#current_prg) THEN
+	                    #stepChange := 40;
+	                ELSE
+	                    #changeErrTimer(IN := #statPrgSelection <> DINT_TO_BYTE(#current_prg),
+	                                      PT := #CHANGE_FAULT);
+	                    IF #changeErrTimer.Q THEN
+	                        #stepChange := 50;
+	                    END_IF;
+	                END_IF;
+	            40:
+	                #statPrgChangeDone := 1;
+	                #statPrgChangeError := 0;
+	                #statRunChange := 0;
+	                #stepChange := 0;
+	                RESET_TIMER(#changeDelayTimer);
+	                RESET_TIMER(#changeErrTimer);
+	            50:
+	                #statPrgChangeError := 1;
+	                #statPrgChangeDone := 0;
+	                #stepChange := 0;
+	                RESET_TIMER(#changeDelayTimer);
+	                RESET_TIMER(#changeErrTimer);
+	        END_CASE;
+	    ELSIF NOT #statRunChange THEN
+	        #stepChange := 0;
+	        RESET_TIMER(#changeDelayTimer);
+	        RESET_TIMER(#changeErrTimer);
+	    END_IF;
+	END_REGION
+	IF #execute AND #statPrgChangeDone AND NOT #statDone AND NOT #statError THEN
+	    CASE #step OF
+	        0:
+	            #statTrigger := 0;
+	            #statResult1 := 0;
+	            #statResult2 := 0;
+	            #statResult3 := 0;
+	            #statResult4 := 0;
+	            #statResult5 := 0;
+	            #statResult6 := 0;
+	            #statResult7 := 0;
+	            #statResult8 := 0;
+	            #statResult9 := 0;
+	            #statResult10 := 0;
+	            #statRunSeqCount_OK := 0;
+	            #statRunSeqCountError := 0;
+	            RESET_TIMER(#runSeqFaultTimer);
+	            RESET_TIMER(#delayTimer);
+	            #step := 10;
+	        10:
+	            #statOldRunSeqCount := #seq_count;
+	            #step := 20;
+	        20:
+	            #delayTimer(IN := TRUE,
+	                        PT := #DLY_TIME);
+	            IF #delayTimer.Q THEN
+	                #step := 30;
+	            END_IF;
+	        30:
+	            RESET_TIMER(#delayTimer);
+	            #step := 40;
+	        40:
+	            #statTrigger := 1;
+	            #step := 50;
+	        50:
+	            IF #seq_count <> #statOldRunSeqCount THEN
+	                #statRunSeqCount_OK := 1;
+	                #statRunSeqCountError := 0;
+	                #step := 60;
+	            ELSE
+	                #runSeqFaultTimer(IN := #seq_count = #statOldRunSeqCount,
+	                                  PT := #ERR_TIME);
+	                IF #runSeqFaultTimer.Q THEN
+	                    #statRunSeqCount_OK := 0;
+	                    #statRunSeqCountError := 1;
+	                    #step := 80;
+	                END_IF;
+	            END_IF;
+	        60:
+	            IF #statRunSeqCount_OK THEN
+	                IF #tool_1 THEN
+	                    #statResult1 := 1;
+	                END_IF;
+	                IF #tool_2 THEN
+	                    #statResult2 := 1;
+	                END_IF;
+	                IF #tool_3 THEN
+	                    #statResult3 := 1;
+	                END_IF;
+	                IF #tool_4 THEN
+	                    #statResult4 := 1;
+	                END_IF;
+	                IF #tool_5 THEN
+	                    #statResult5 := 1;
+	                END_IF;
+	                IF #tool_6 THEN
+	                    #statResult6 := 1;
+	                END_IF;
+	                IF #tool_7 THEN
+	                    #statResult7 := 1;
+	                END_IF;
+	                IF #tool_8 THEN
+	                    #statResult8 := 1;
+	                END_IF;
+	                IF #tool_9 THEN
+	                    #statResult9 := 1;
+	                END_IF;
+	                IF #tool_10 THEN
+	                    #statResult10 := 1;
+	                END_IF;
+	                #step := 70;
+	            END_IF;
+	        70:
+	            #statDone := 1;
+	            #statError := 0;
+	            #statTrigger := 0;
+	            #step := 0;
+	            RESET_TIMER(#runSeqFaultTimer);
+	            RESET_TIMER(#delayTimer);
+	        80:
+	            #statDone := 0;
+	            #statError := 1;
+	            #statTrigger := 0;
+	            #step := 0;
+	            RESET_TIMER(#runSeqFaultTimer);
+	            RESET_TIMER(#delayTimer);
+	    END_CASE;
+	ELSIF NOT #execute THEN
+	    #statDone := 0;
+	    #statError := 0;
+	    #statTrigger := 0;
+	    #step := 0;
+	    #statResult1 := 0;
+	    #statResult2 := 0;
+	    #statResult3 := 0;
+	    #statResult4 := 0;
+	    #statResult5 := 0;
+	    #statResult6 := 0;
+	    #statResult7 := 0;
+	    #statResult8 := 0;
+	    #statResult9 := 0;
+	    #statResult10 := 0;
+	    #statRunSeqCount_OK := 0;
+	    #statRunSeqCountError := 0;
+	    RESET_TIMER(#runSeqFaultTimer);
+	    RESET_TIMER(#delayTimer);
+	END_IF;
+	REGION output assignment
+	    #done := #statDone;
+	    #error := #statError;   //run seq. count error
+	    #faultState := #statFaultState;
+	    #triggerCmd := #statTrigger;
+	    #runSequenceError := #statRunSeqCountError;
+	    #faultProgramChange := #statPrgChangeError;
+	    #prgChangeDone := #statPrgChangeDone;
+	    #result1 := #statResult1;
+	    #result2 := #statResult2;
+	    #result3 := #statResult3;
+	    #result4 := #statResult4;
+	    #result5 := #statResult5;
+	    #result6 := #statResult6;
+	    #result7 := #statResult7;
+	    #result8 := #statResult8;
+	    #result9 := #statResult9;
+	    #result10 := #statResult10;
+	    #prgSelection := #statPrgSelection;
+	END_REGION
+	
+	
+	            
+	            
+	            
+	            
+	                    
+	                
+	            
+	
+	
+	
+	
+	                
+	                
+	            
+	            
+	    
+	    
+END_FUNCTION_BLOCK
+

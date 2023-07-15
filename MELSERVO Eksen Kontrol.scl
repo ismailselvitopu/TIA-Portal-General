@@ -1,0 +1,282 @@
+﻿FUNCTION_BLOCK "MELSERVO Eksen Kontrol"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR_INPUT 
+      Mode { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Byte;
+      Enable { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      "JOG+" { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      "JOG-" { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      Execute { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      "Fault Reset" { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      "Target Torque" { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Real;
+      "Torque Slope" { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Real;
+      Position { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Real;
+      Velocity { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Real;
+      "ACC Ramp [ms]" { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : DInt;
+      "DEC Ramp [ms]" { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : DInt;
+      HW_IO_TEL { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : HW_IO;
+   END_VAR
+
+   VAR_OUTPUT 
+      "Axis Ready" { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      "Axis Enabled" { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      Homing { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      "Homing Error" { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      "Axis Homed" { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      "Axis Moving" { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      "In Position" { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      "Axis Fault" { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      "Actual Mode" { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Byte;
+      "Actual Torque" { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Real;
+      "Actual Position" { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Real;
+      "Actual Velocity" { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Real;
+   END_VAR
+
+   VAR_IN_OUT 
+      TEL_RD : "UDT_RD_TEL";
+      TEL_WR : "UDT_WR_TEL";
+   END_VAR
+
+   VAR 
+      statSwitchON { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statEnableVoltage { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statQuickStop { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statEnableOperation { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statMode { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Byte;
+      statHomingInProgress { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statHomingCompleted { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statHomingError { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statAxisHomed { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statAxisReady { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statAxisEnabled { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statAxisFault { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statInPosition { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statActualMode { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Byte;
+      statActualTorque { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Int;
+      statActualPosition { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : DInt;
+      statActualVelocity { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : DInt;
+      statScaledActualTorque { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Real;
+      statScaledActualPosition { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Real;
+      statScaledActualVelocity { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Real;
+      "statOldJOG-" { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      "statOldJOG+" { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statTargetVelocity { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Real;
+      statExecute { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      statResetStep { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Int;
+      statFaultReset { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+      "Fault Reset Timer" {InstructionName := 'TON_TIME'; LibVersion := '1.0'; ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : TON_TIME;
+      "Execute Delay Timer" {InstructionName := 'TON_TIME'; LibVersion := '1.0'; ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : TON_TIME;
+      statACC { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'; S7_SetPoint := 'True'} : DInt;
+      statDEC { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : DInt;
+      statAxisMoving { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Bool;
+   END_VAR
+
+   VAR_TEMP 
+      tempReturnRDTEL : Int;
+      tempReturnWRTEL : Int;
+      "tempReleaseJOG-" : Bool;
+      "tempReleaseJOG+" : Bool;
+   END_VAR
+
+   VAR CONSTANT 
+      "JOG_SPEED+" : Real := 20.0;
+      "JOG_SPEED-" : Real := -20.0;
+      RST_DLY : Time := T#500ms;
+      EXE_DLY : Time := T#50ms;
+   END_VAR
+
+
+BEGIN
+	REGION Read PROFINET telegram data
+	    #tempReturnRDTEL := DPRD_DAT(LADDR := #HW_IO_TEL, RECORD => #TEL_RD);
+	    
+	    //  0: Mod seçili değil, 1: Pozisyon, 3: Hiz, 4: Tork, 6: Home
+	    #statActualMode := #TEL_RD."Modes of operation display";
+	    
+	    //  Home hareketi sırasında izlenecek sinyaller
+	    #statHomingInProgress := NOT #TEL_RD.Statusword[5] AND NOT #TEL_RD.Statusword[4] AND NOT #TEL_RD.Statusword[2];
+	    #statHomingCompleted := NOT #TEL_RD.Statusword[5] AND #TEL_RD.Statusword[4] AND #TEL_RD.Statusword[2];
+	    #statHomingError := #TEL_RD.Statusword[5] AND NOT #TEL_RD.Statusword[4];
+	    
+	    //  Eksen durum sinyalleri
+	    #statAxisReady := #TEL_RD.Statusword[8] AND NOT #TEL_RD.Statusword[11];
+	    #statAxisEnabled := #TEL_RD.Statusword[8] AND #TEL_RD.Statusword[9] AND #TEL_RD.Statusword[10] AND #TEL_RD.Statusword[12] AND #TEL_RD.Statusword[13];
+	    #statAxisFault := #TEL_RD.Statusword[11];
+	    #statAxisHomed := #TEL_RD."Status DO 2"[7];
+	    #statInPosition := #TEL_RD."Status DO 1"[4] AND #TEL_RD."Status DO 2"[11];
+	    #statAxisMoving := NOT #TEL_RD."Status DO 2"[11];
+	    
+	    //  Anlık değerler
+	    #statActualTorque := #TEL_RD."Torque actual value";
+	    #statActualPosition := #TEL_RD."Position actual value";
+	    #statActualVelocity := #TEL_RD."Velocity actual value";
+	END_REGION
+	
+	REGION Write PROFINET telegram data
+	    #tempReturnWRTEL := DPWR_DAT(LADDR := #HW_IO_TEL, RECORD := #TEL_WR);
+	    
+	    //  Mod seçimi
+	    #TEL_WR."Modes of operation" := #statMode;
+	    
+	    //  Eksen kontrol sinyalleri
+	    #TEL_WR.Controlword[8] := #statSwitchON;
+	    #TEL_WR.Controlword[9] := #statEnableVoltage;
+	    #TEL_WR.Controlword[10] := #statQuickStop;
+	    #TEL_WR.Controlword[11] := #statEnableOperation;
+	    #TEL_WR.Controlword[15] := #statFaultReset;
+	    #TEL_WR.Controlword[12] := #statExecute;
+	    
+	    //  Hedef değerler
+	    #TEL_WR."Target torque" := REAL_TO_INT(#"Target Torque" * 10);
+	    #TEL_WR."Torque slope" := REAL_TO_DINT(#"Torque Slope" * 10);
+	    #TEL_WR."Target position" := REAL_TO_DINT(#Position * 1000);
+	    #TEL_WR."Target velocity" := REAL_TO_DINT(#statTargetVelocity * 100);
+	    #TEL_WR."Profile velocity" := REAL_TO_DINT(#Velocity * 100);
+	    #TEL_WR."Profile acceleration" := #statACC;
+	    #TEL_WR."Profile deceleration" := #statDEC;
+	END_REGION
+	
+	REGION Acceleration and deceleration
+	    
+	    // Kalkış ve duruş süreleri ayarlanmamışsa 100 ms değer atanır.
+	    IF #"ACC Ramp [ms]" = 0 THEN
+	        #statACC := 100;
+	    ELSE
+	        #statACC := #"ACC Ramp [ms]";
+	    END_IF;
+	    
+	    IF #"DEC Ramp [ms]" = 0 THEN
+	        #statDEC := 100;
+	    ELSE
+	        #statDEC := #"DEC Ramp [ms]";
+	    END_IF;
+	END_REGION
+	
+	REGION Mode selection
+	    IF NOT #"JOG-" AND NOT #"JOG+" THEN
+	        #statMode := #Mode;
+	    ELSE
+	        #statMode := 3;
+	    END_IF;
+	END_REGION
+	
+	REGION Enable signal to drive
+	    IF NOT #statAxisFault THEN
+	        IF #Enable THEN
+	            #statSwitchON := 1;
+	            #statEnableVoltage := 1;
+	            #statQuickStop := 1;
+	            #statEnableOperation := 1;
+	        ELSE
+	            #statSwitchON := 0;
+	            #statEnableVoltage := 0;
+	            #statQuickStop := 0;
+	            #statEnableOperation := 0;
+	        END_IF;
+	        #statResetStep := 0;
+	        #statFaultReset := 0;
+	    ELSE
+	        CASE #statResetStep OF
+	            0:
+	                #statSwitchON := 0;
+	                #statEnableVoltage := 0;
+	                #statQuickStop := 0;
+	                #statEnableOperation := 0;
+	                #statFaultReset := 0;
+	                RESET_TIMER(#"Fault Reset Timer");
+	                
+	                IF #"Fault Reset" THEN
+	                    #statResetStep := 10;
+	                END_IF;
+	            10:
+	                #statFaultReset := 1;
+	                #"Fault Reset Timer"(IN := #statFaultReset,
+	                                     PT := #RST_DLY);
+	                IF #"Fault Reset Timer".Q THEN
+	                    #statResetStep := 11;
+	                END_IF;
+	            11:
+	                RESET_TIMER(#"Fault Reset Timer");
+	                #statResetStep := 20;
+	            20:
+	                #statFaultReset := 0;
+	                #"Fault Reset Timer"(IN := NOT #statFaultReset,
+	                                     PT := #RST_DLY);
+	                IF #"Fault Reset Timer".Q THEN
+	                    #statResetStep := 30;
+	                END_IF;
+	            30:
+	                #statResetStep := 0;
+	        END_CASE;
+	    END_IF;
+	END_REGION
+	
+	REGION Execute signal to drive
+	    IF #statAxisEnabled THEN
+	        IF #statActualMode = 1 OR #statActualMode = 6 THEN
+	            IF #Execute AND #TEL_RD."Status DO 2"[11] THEN  //  DO2.11 Eksen hareket etmiyor bilgisi
+	                #"Execute Delay Timer"(IN := TRUE,
+	                                       PT := #EXE_DLY);
+	                IF #"Execute Delay Timer".Q THEN
+	                    #statExecute := 1;
+	                END_IF;
+	            ELSIF NOT #Execute THEN
+	                RESET_TIMER(#"Execute Delay Timer");
+	                #statExecute := 0;
+	            END_IF;
+	        ELSE
+	            RESET_TIMER(#"Execute Delay Timer");
+	            #statExecute := 0;
+	        END_IF;
+	    ELSE
+	        RESET_TIMER(#"Execute Delay Timer");
+	        #statExecute := 0;
+	    END_IF;
+	END_REGION
+	
+	REGION JOG movement
+	    //  JOG butonları bırakıldığında hedef hız bilgisine 0 gönderilir.
+	    #"tempReleaseJOG-" := NOT #"JOG-" AND #"statOldJOG-";
+	    #"statOldJOG-" := #"JOG-";
+	    
+	    #"tempReleaseJOG+" := NOT #"JOG+" AND #"statOldJOG+";
+	    #"statOldJOG+" := #"JOG+";
+	    
+	    IF #"tempReleaseJOG-" OR #"tempReleaseJOG+" THEN
+	        #statTargetVelocity := 0;
+	    END_IF;
+	    
+	    IF #statAxisEnabled AND #statActualMode = 3 THEN
+	        IF #"JOG+" THEN
+	            #statTargetVelocity := #"JOG_SPEED+";
+	        ELSIF #"JOG-" THEN
+	            #statTargetVelocity := #"JOG_SPEED-";
+	        END_IF;
+	    ELSE
+	        #statTargetVelocity := 0;
+	    END_IF;
+	END_REGION
+	
+	REGION Scale for actual values
+	    #statScaledActualTorque := INT_TO_REAL(#statActualTorque) / 10;
+	    #statScaledActualVelocity := DINT_TO_REAL(#statActualVelocity) / 100;
+	    #statScaledActualPosition := DINT_TO_REAL(#statActualPosition) / 1000;
+	END_REGION
+	
+	REGION Output assignments
+	    #"Axis Ready" := #statAxisReady;
+	    #"Axis Enabled" := #statAxisEnabled;
+	    #Homing := #statHomingInProgress AND NOT #statHomingCompleted;
+	    #"Homing Error" := #statHomingError;
+	    #"Axis Homed" := #statAxisHomed;
+	    #"Axis Moving" := #statAxisMoving;
+	    #"In Position" := #statInPosition;
+	    #"Axis Fault" := #statAxisFault;
+	    #"Actual Mode" := #statActualMode;
+	    #"Actual Torque" := #statScaledActualTorque;
+	    #"Actual Position" := #statScaledActualPosition;
+	    #"Actual Velocity" := #statScaledActualVelocity;
+	END_REGION
+	
+END_FUNCTION_BLOCK
+
